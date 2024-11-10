@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Home</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css"
+    />
+  </head>
+  <body>
+    
+    <main class="container">
+
+    <h1>Welcome!</h1>
+    <br><br>
+
+    <div id="login-message"></div>
+
+    <p>
+      <a href="/login">Login</a>
+      <br />
+      <a href="/dashboard" id="dashboard-link">Am I logged in?</a>
+      <br />
+      <a href="/register">Register for the service</a>
+      <!-- <a href="/dashboard" id="redirect-dashboard-link">Am I logged in? (simple). This one redirects to a new page</a> -->
+    </p>
+
+    <br />
+
+    <section>
+        <p>Welcome, I hope you have a wonderful day!</p>
+    </section>
+
+    <script>
+      //     // Check if the user is logged in by checking for a token in localStorage
+      //     const token = localStorage.getItem('jwt-token');
+      //     const loginMessage = document.getElementById('login-message');
+      //     const dashboardLink = document.getElementById('dashboard-link');
+
+      //     if (token) {
+      //         loginMessage.innerText = 'You are logged in!';
+      //         dashboardLink.style.display = 'inline';
+      //     } else {
+      //         loginMessage.innerText = 'You are not logged in.';
+      //         dashboardLink.style.display = 'none';
+      //     }
+      //
+    </script>
+
+    <!--
+    <script>
+        // Check if the user is logged in by checking for a token in localStorage
+        const token = localStorage.getItem('jwt-token');
+        const dashboardLink = document.getElementById('dashboard-link');
+        console.log('Token:', token);
+    
+        if (token) {
+            dashboardLink.style.display = 'inline';
+    
+            // When the user clicks on the dashboard link, send the token in the Authorization header
+            dashboardLink.addEventListener('click', async function (event) {
+                event.preventDefault();  // Prevent default link navigation
+    
+                try {
+                    const response = await fetch('/dashboard', {
+                        method: 'GET',
+                        headers: { 
+                            'Authorization': `Bearer ${token}`  // Send the token in the Authorization header
+                        },
+                        body:{
+                            'email': localStorage.getItem('email') // Send the email in the body
+                        } 
+                    });
+    
+                    // Redirect to the dashboard if the token is valid
+                   
+                    // window.location.href = '/dashboard';
+                    console.log('Response:', response);
+                    
+
+                    if (response.ok) {
+                        alert('You are logged in!');
+                    } else {
+                        // Handle the error (e.g., token is invalid or expired)
+                        alert('You are not authorized');
+                    }
+                } catch (error) {
+                    console.error('Error accessing the dashboard:', error);
+                }
+            });
+        } else {
+            //we display the link regardless for testing purposes
+            // dashboardLink.style.display = 'none';  // Hide the dashboard link if no token is found
+        }
+     </script>
+    -->
+</main>
+
+  </body>
+</html>

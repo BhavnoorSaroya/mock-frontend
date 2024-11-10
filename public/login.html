@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css"
+    />
+</head>
+<body class="container">
+    <br>
+    <h1>Login</h1>
+
+    <form id="login-form">
+        <label for="username">Username:</label>
+        <input type="text" id="username" required>
+        <br><br>
+        <label for="password">Password:</label>
+        <input type="password" id="password" required>
+        <br><br>
+        <button type="submit">Login</button>
+        <a href="/forgot">forgot your password?</a>
+    </form>
+
+    
+
+    <p id="error-message" style="color: red;"></p>
+
+    <script>
+        document.getElementById('login-form').addEventListener('submit', async function (event) {
+            event.preventDefault();
+    
+            const email = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            localStorage.setItem('email', email);
+    
+            try {
+                const authUrl = 'https://isa-singh.azurewebsites.net/login';
+                // const authUrl = 'http://localhost:3000/login';
+                const response = await fetch(authUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    credentials: 'include', // ask for credential cookie to be included
+                    body: JSON.stringify({ email, password }),
+                });
+    
+                if (!response.ok) {
+                    throw new Error('Login failed');
+                }
+    
+                const data = await response.json();
+                const token = data.token;
+
+                
+    
+                // Ensure the token is a string and store it in localStorage
+                localStorage.setItem('jwt-token', token);
+                console.log('Token stored:', token);
+
+      
+                // console.log('Redirecting to dashboard in 5 seconds...');
+                // Promise.resolve(setTimeout(() => {
+                //     window.location.href = '/dashboard';
+                // }, 50000));
+
+                // Redirect back to the index page
+                window.location.href = '/';
+            } catch (error) {
+                document.getElementById('error-message').innerText = 'Invalid username or password.';
+            }
+        });
+    </script>
+    </body>
+</html>

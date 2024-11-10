@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css"
+    />
+</head>
+<body class="container">
+    <br>
+    <h2>Register for the application</h2>
+    <form id="register-form" >
+        <label for="email">Email:</label>
+        <input type="email" id="email" required>
+        <small>We will never share your email with any 3rd party of send you spam</small>
+        <label for="password">Password:</label>
+        <input type="password" id="password" required>
+        <small>Choose something secure</small>
+        <br><br>
+        <button type="submit">Register</button>
+    </form>
+
+    <p id="error-message" style="color: red;"></p>
+
+    <script>
+        document.getElementById('register-form').addEventListener('submit', async function (event) {
+            event.preventDefault();
+
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            try {
+                const registerUrl = 'https://isa-singh.azurewebsites.net/register';
+                // const registerUrl = 'http://localhost:3000/register';
+                const response = await fetch(registerUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    credentials: 'include',
+                    body: JSON.stringify({ email, password }),
+                });
+
+                if (!response.ok) {
+                    throw new Error('Registration failed');
+                }
+
+                const data = await response.json();
+                console.log('Registration successful:', data);
+
+                // Redirect or handle success as needed
+                window.location.href = '/';
+            } catch (error) {
+                document.getElementById('error-message').innerText = 'Registration failed. Please try again.';
+            }
+        });
+    </script> 
+</body>
+</html>
