@@ -88,6 +88,10 @@ app.get("/detect", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "detect.html"))
 })
 
+app.get("/admin", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "admin.html"))
+})
+
 // Start the server
 const PORT = 8080;
 app.listen(PORT, () => {

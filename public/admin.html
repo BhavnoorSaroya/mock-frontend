@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Users Table</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      async function fetchUsers() {
+        const queryText = JSON.stringify({ query: "SELECT * FROM users" });
+        try {
+          const response = await fetch("/query", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: queryText
+          });
+
+          const data = await response.json();
+          displayUsersTable(data.users);
+        } catch (error) {
+          console.error("Error fetching users:", error);
+        }
+      }
+
+      function displayUsersTable(users) {
+        const tableContainer = document.getElementById("table-container");
+        let table = "<table><thead><tr>";
+        Object.keys(users[0]).forEach(key => {
+          table += `<th>${key}</th>`;
+        });
+        table += "</tr></thead><tbody>";
+
+        users.forEach(user => {
+          table += "<tr>";
+          Object.values(user).forEach(value => {
+            table += `<td>${value}</td>`;
+          });
+          table += "</tr>";
+        });
+        table += "</tbody></table>";
+
+        tableContainer.innerHTML = table;
+      }
+
+      fetchUsers();
+    });
+  </script>
+</head>
+<body>
+  <main class="container">
+    <h1>Users Table</h1>
+    <div id="table-container"></div>
+  </main>
+</body>
+</html>
