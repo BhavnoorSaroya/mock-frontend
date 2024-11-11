@@ -20,7 +20,7 @@ const publicKey = fs.readFileSync("public.pem", "utf8");
 
 function verifySignature(signature, payload) {
   try {
-    
+
     const verifier = crypto.createVerify("SHA256");
 
     verifier.update(payload);
@@ -28,7 +28,7 @@ function verifySignature(signature, payload) {
 
     const decodedSignature = Buffer.from(signature, "base64");
     const isVerified = verifier.verify(publicKey, decodedSignature);
-    
+
     if (isVerified) {
       console.log("Signature is valid");
       return true;
@@ -43,20 +43,20 @@ function verifySignature(signature, payload) {
 
 
 app.use((req, res, next) => {
-    console.log("Request received");
-    const signature = req.headers["x-gateway-signature"];
-    const url = req.url;
-    const method = req.method;
-    const payload = `${method}${url}`;
-    verifySignature(signature, payload);
-    next();
-    }
+  console.log("Request received");
+  const signature = req.headers["x-gateway-signature"];
+  const url = req.url;
+  const method = req.method;
+  const payload = `${method}${url}`;
+  verifySignature(signature, payload);
+  next();
+}
 );
 
 // Serve the login page
 app.get("/login", (req, res) => {
-    res.sendFile(path.join(__dirname, "public", "login.html"));
-  });
+  res.sendFile(path.join(__dirname, "public", "login.html"));
+});
 
 // Serve the dashboard only if the JWT is valid
 app.get("/dashboard", (req, res) => {
@@ -68,8 +68,8 @@ app.get("/password-reset", (req, res) => {
 });
 
 app.get("/forgot", (req, res) => {
-    res.sendFile(path.join(__dirname, "public", "forgot.html"));
-    });
+  res.sendFile(path.join(__dirname, "public", "forgot.html"));
+});
 
 // Serve the home page (index)
 app.get("/", (req, res) => {
@@ -83,6 +83,10 @@ app.get("/register", (req, res) => {
 app.get("/message", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "message.html"));
 });
+
+app.get("/detect", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "detect.html"))
+})
 
 // Start the server
 const PORT = 8080;

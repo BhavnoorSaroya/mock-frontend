@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Upload for Detection</title>
+    <link rel="stylesheet" href="https://unpkg.com/@picocss/pico@1.*/css/pico.min.css">
+</head>
+
+<body>
+    <main class="container">
+        <h1>Upload Image for Detection</h1>
+        <form action="/detect" method="post" enctype="multipart/form-data">
+            <label for="imageUpload">Choose an image to upload:</label>
+            <input type="file" id="imageUpload" name="image" accept="image/*" required>
+            <button type="submit" class="primary">Submit</button>
+        </form>
+    </main>
+</body>
+
+</html>
