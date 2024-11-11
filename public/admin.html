@@ -29,15 +29,21 @@
 
       function displayUsersTable(users) {
         const tableContainer = document.getElementById("table-container");
-        let table = "<table><thead><tr><th>ID</th><th>Email</th><th>api calls</th></tr></thead><tbody>";
+
+        const headers = ["ID", "Email", "API Tokens Left"];
+
+        let table = "<table><thead><tr>";
+        headers.forEach(header => {
+          table += `<th>${header}</th>`;
+        });
+        table += "</tr></thead><tbody>";
 
         users.forEach(user => {
-          table += `<tr>
-                      <td>${user[0]}</td>
-                      <td>${user[1]}</td>
-                      <td>${user[2]}</td>
-                      
-                    </tr>`;
+          table += "<tr>";
+          table += `<td>${user[0]}</td>`;   // ID
+          table += `<td>${user[1]}</td>`;   // Email
+          table += `<td>${user[3]}</td>`;   // API Tokens Left
+          table += "</tr>";
         });
         table += "</tbody></table>";
 
