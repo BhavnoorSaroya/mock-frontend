@@ -16,12 +16,13 @@
       .loader:before,
       .loader:after {
         content: "";
-        height: 20px;
+        height: 60px;
+        
         aspect-ratio: 1;
         border-radius: 50%;
         background: radial-gradient(farthest-side, #000 95%, #0000) 50%/8px 8px
           no-repeat #fff;
-        animation: l10 1.5s infinite alternate;
+        animation: l10 1.0s infinite alternate;
       }
       .loader:after {
         --s: -1;
@@ -94,11 +95,12 @@
       </form>
 
       <h4 id="loaderText" style="display: none;">Performing dark magic...</h4>
+      <h4 id="completeText" style="display: none;">Dark magic complete...</h4>
       <!-- Loader -->
       <div
         id="loader"
         class="loader"
-        style="display: none; margin-top: 20px"
+        style="display: none; margin-top: 20px; margin-left: 30vw;"
       ></div>
 
       <div id="resultContainer" style="display: none; margin-top: 20px">
