@@ -48,7 +48,10 @@ app.use((req, res, next) => {
   const url = req.url;
   const method = req.method;
   const payload = `${method}${url}`;
-  verifySignature(signature, payload);
+  if (!verifySignature(signature, payload)){
+    return res.status(401).send("invalid signature, all reqeusts must be signed");
+  }
+
   next();
 }
 );
