@@ -12,7 +12,7 @@ class Server {
     this.routes();
   }
 
-  // Called everytime a GET request is made 
+  // Called everytime a request is made 
   middlewares() {
     this.app.use(express.json());
     this.app.use(express.static('public'));
@@ -24,7 +24,7 @@ class Server {
       '/',
       '/login',
       '/dashboard',
-      '/password-reset',
+      '/reset',
       '/forgot',
       '/register',
       '/message',
