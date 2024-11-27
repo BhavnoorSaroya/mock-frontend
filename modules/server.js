@@ -29,6 +29,7 @@ class Server {
       '/register',
       '/message',
       '/detect',
+      '/video',
       '/admin',
     ];
 

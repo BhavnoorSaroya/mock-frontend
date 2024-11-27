@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Live Video Stream</title>
+  <link rel="stylesheet" href="https://unpkg.com/@picocss/pico@1.*/css/pico.min.css" />
+  <style>
+    /* Container for the video and overlays */
+    .video-container {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-top: 20px;
+      width: 100%;
+      max-width: 800px;
+      /* Adjust as needed */
+      height: 450px;
+      /* Adjust as needed */
+      background-color: #000;
+      /* Fallback background */
+      cursor: pointer;
+    }
+
+    /* Video Frame Styling */
+    .video-frame {
+      max-width: 100%;
+      max-height: 100%;
+      border: 2px solid #000;
+      display: none;
+      /* Hidden initially */
+    }
+
+    /* Standard Play Button Styling */
+    .play-button {
+      position: absolute;
+      font-size: 3em;
+      color: #fff;
+      background: rgba(0, 0, 0, 0.5);
+      border: none;
+      border-radius: 50%;
+      width: 80px;
+      height: 80px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .play-button:hover {
+      background: rgba(0, 0, 0, 0.7);
+    }
+
+    /* Loader Styling */
+    .loader {
+      position: absolute;
+      display: none;
+      /* Hidden initially */
+      gap: 10px;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .loader:before,
+    .loader:after {
+      content: "";
+      height: 40px;
+      width: 40px;
+      border-radius: 50%;
+      background: radial-gradient(farthest-side, #fff 95%, #fff0) 50%/8px 8px no-repeat #fff;
+      animation: l10 1.0s infinite alternate;
+    }
+
+    .loader:after {
+      margin-left: 10px;
+      animation-delay: 0.5s;
+    }
+
+    @keyframes l10 {
+
+      0%,
+      20% {
+        transform: scaleX(1) rotate(0deg);
+        clip-path: inset(0);
+      }
+
+      60%,
+      100% {
+        transform: scaleX(1) rotate(30deg);
+        clip-path: inset(40% 0 0);
+      }
+    }
+
+    /* Loader Text Styling */
+    #loaderText {
+      position: absolute;
+      top: 60%;
+      left: 50%;
+      transform: translateX(-50%);
+      color: #fff;
+      font-size: 1em;
+      display: none;
+      /* Hidden initially */
+    }
+  </style>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const videoContainer = document.getElementById('videoContainer');
+      const playButton = document.getElementById('playButton');
+      const videoFrame = document.getElementById('videoFrame');
+      const loader = document.getElementById('loader');
+      const loaderText = document.getElementById('loaderText');
+
+      // Function to start the video stream
+      function startVideo() {
+        // Show the loader and loader text
+        loader.style.display = 'flex';
+        loaderText.style.display = 'block';
+
+        // Hide the play button
+        playButton.style.display = 'none';
+
+        // Set the src attribute to start streaming
+        videoFrame.src = "{{ url_for('video_feed') }}";
+
+        // Display the video frame
+        videoFrame.style.display = 'block';
+      }
+
+      // Event listener for the play button
+      playButton.addEventListener('click', (e) => {
+        e.stopPropagation(); // Prevent triggering container's click event
+        startVideo();
+      });
+
+      // Optional: Allow clicking anywhere on the container to play
+      videoContainer.addEventListener('click', () => {
+        if (!videoFrame.src) { // Only start if not already started
+          startVideo();
+        }
+      });
+
+      // Event handlers for the video frame
+      videoFrame.addEventListener('load', () => {
+        // Hide the loader once the first frame is loaded
+        loader.style.display = 'none';
+        loaderText.style.display = 'none';
+      });
+
+      videoFrame.addEventListener('error', () => {
+        // Hide the loader and show error message
+        loader.style.display = 'none';
+        loaderText.textContent = 'Failed to load video stream.';
+        loaderText.style.display = 'block';
+      });
+    });
+  </script>
+</head>
+
+<body>
+  <main class="container">
+    <h1>Live Video Stream</h1>
+
+    <div id="videoContainer" class="video-container">
+      <!-- Standard Play Button -->
+      <button id="playButton" class="play-button" aria-label="Play">
+        ▶
+      </button>
+
+      <!-- Loader -->
+      <div id="loader" class="loader">
+        <!-- Loader animations are handled via CSS ::before and ::after -->
+      </div>
+      <h4 id="loaderText">Loading video stream...</h4>
+
+      <!-- Video Frame -->
+      <img id="videoFrame" class="video-frame" src="" alt="Live Video Stream" />
+    </div>
+  </main>
+</body>
+
+</html>
