@@ -36,7 +36,7 @@ class Server {
       this.app.get(route, (req, res) => {
         res.sendFile(
           // Send index if route is '/'
-          path.join(__dirname, 'public', `${route === '/' ? 'index' : route.substring(1)}.html`)
+          path.join(__dirname, '../public', `${route === '/' ? 'index' : route.substring(1)}.html`)
         );
       });
     });
