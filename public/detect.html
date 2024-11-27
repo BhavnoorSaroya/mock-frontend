@@ -1,22 +1,112 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Image Upload for Detection</title>
-    <link rel="stylesheet" href="https://unpkg.com/@picocss/pico@1.*/css/pico.min.css">
-</head>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/@picocss/pico@1.*/css/pico.min.css"
+    />
+    <style>
+      .loader {
+        display: inline-flex;
+        gap: 10px;
+      }
+      .loader:before,
+      .loader:after {
+        content: "";
+        height: 60px;
+        
+        aspect-ratio: 1;
+        border-radius: 50%;
+        background: radial-gradient(farthest-side, #000 95%, #0000) 50%/8px 8px
+          no-repeat #fff;
+        animation: l10 1.0s infinite alternate;
+      }
+      .loader:after {
+        --s: -1;
+      }
+      @keyframes l10 {
+        0%,
+        20% {
+          transform: scaleX(var(--s, 1)) rotate(0deg);
+          clip-path: inset(0);
+        }
+        60%,
+        100% {
+          transform: scaleX(var(--s, 1)) rotate(30deg);
+          clip-path: inset(40% 0 0);
+        }
+      }
+    </style>
+    <script>
+      async function handleFormSubmit(event) {
+        event.preventDefault();
+        const formData = new FormData(event.target);
 
-<body>
+        // Show loader
+        document.getElementById("loader").style.display = "inline-flex";
+        document.getElementById("loaderText").style.display = "block";
+        document.getElementById("resultContainer").style.display = "none";
+
+        try {
+          const response = await fetch("/detect", {
+            method: "POST",
+            body: formData,
+          });
+          if (response.ok) {
+            const blob = await response.blob();
+            const imageUrl = URL.createObjectURL(blob);
+            document.getElementById("resultImage").src = imageUrl;
+            document.getElementById("resultContainer").style.display = "block";
+          } else {
+            alert("Error: " + response.statusText);
+          }
+        } catch (error) {
+          console.error("Error:", error);
+          alert("An error occurred while processing the image.");
+        } finally {
+          // Hide loader after request completion
+          document.getElementById("loader").style.display = "none";
+          document.getElementById("loaderText").style.display = "none";
+        }
+      }
+    </script>
+  </head>
+
+  <body>
     <main class="container">
-        <h1>Upload Image for Detection</h1>
-        <form action="/detect" method="post" enctype="multipart/form-data">
-            <label for="imageUpload">Choose an image to upload:</label>
-            <input type="file" id="imageUpload" name="image" accept="image/*" required>
-            <button type="submit" class="primary">Submit</button>
-        </form>
-    </main>
-</body>
+      <h1>Upload Image for Detection</h1>
+      <form
+        id="uploadForm"
+        onsubmit="handleFormSubmit(event)"
+        enctype="multipart/form-data"
+      >
+        <label for="imageUpload">Choose an image to upload:</label>
+        <input
+          type="file"
+          id="imageUpload"
+          name="image"
+          accept="image/*"
+          required
+        />
+        <button type="submit" class="primary">Submit</button>
+      </form>
 
+      <h4 id="loaderText" style="display: none;">Performing dark magic...</h4>
+      <h4 id="completeText" style="display: none;">Dark magic complete...</h4>
+      <!-- Loader -->
+      <div
+        id="loader"
+        class="loader"
+        style="display: none; margin-top: 20px; margin-left: 30vw;"
+      ></div>
+
+      <div id="resultContainer" style="display: none; margin-top: 20px">
+        <h2>Result:</h2>
+        <img id="resultImage" alt="Processed Image" style="max-width: 100%" />
+      </div>
+    </main>
+  </body>
 </html>

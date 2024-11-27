@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,7 +9,7 @@
   <script>
     document.addEventListener("DOMContentLoaded", () => {
       async function fetchUsers() {
-        const queryText = JSON.stringify({ query: "SELECT * FROM users" });
+        const queryText = JSON.stringify({ query: "SELECT id, email, counter FROM users" });
         try {
           const response = await fetch("/query", {
             method: "POST",
@@ -19,7 +20,8 @@
           });
 
           const data = await response.json();
-          displayUsersTable(data.users);
+          console.log(data)
+          displayUsersTable(data.result);
         } catch (error) {
           console.error("Error fetching users:", error);
         }
@@ -27,17 +29,20 @@
 
       function displayUsersTable(users) {
         const tableContainer = document.getElementById("table-container");
+
+        const headers = ["ID", "Email", "API usage"];
+
         let table = "<table><thead><tr>";
-        Object.keys(users[0]).forEach(key => {
-          table += `<th>${key}</th>`;
+        headers.forEach(header => {
+          table += `<th>${header}</th>`;
         });
         table += "</tr></thead><tbody>";
 
         users.forEach(user => {
           table += "<tr>";
-          Object.values(user).forEach(value => {
-            table += `<td>${value}</td>`;
-          });
+          table += `<td>${user[0]}</td>`;   // ID
+          table += `<td>${user[1]}</td>`;   // Email
+          table += `<td>${user[2]}</td>`;   // API Tokens Left
           table += "</tr>";
         });
         table += "</tbody></table>";
@@ -49,10 +54,12 @@
     });
   </script>
 </head>
+
 <body>
   <main class="container">
     <h1>Users Table</h1>
     <div id="table-container"></div>
   </main>
 </body>
+
 </html>
