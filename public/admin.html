@@ -20,6 +20,102 @@
           });
 
           const data = await response.json();
+          displayUsersTable(data.result);
+        } catch (error) {
+          console.error("Error fetching users:", error);
+        }
+      }
+
+      async function deleteUser(email) {
+        try {
+          const response = await fetch("/delete", {
+            method: "DELETE",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ email: email }),
+            credentials: "include" // Include cookies for authentication
+          });
+
+          const data = await response.json();
+          if (response.ok) {
+            alert(data.message);
+            fetchUsers(); // Refresh the table
+          } else {
+            alert(`Error: ${data.message}`);
+          }
+        } catch (error) {
+          console.error("Error deleting user:", error);
+        }
+      }
+
+      function displayUsersTable(users) {
+        const tableContainer = document.getElementById("table-container");
+
+        const headers = ["ID", "Email", "API usage", "Actions"];
+
+        let table = "<table><thead><tr>";
+        headers.forEach(header => {
+          table += `<th>${header}</th>`;
+        });
+        table += "</tr></thead><tbody>";
+
+        users.forEach(user => {
+          table += "<tr>";
+          table += `<td>${user[0]}</td>`; // ID
+          table += `<td>${user[1]}</td>`; // Email
+          table += `<td>${user[2]}</td>`; // API usage
+          table += `<td><button onclick="deleteUser('${user[1]}')">Delete</button></td>`; // Delete button
+          table += "</tr>";
+        });
+        table += "</tbody></table>";
+
+        tableContainer.innerHTML = table;
+      }
+
+      // Make deleteUser function accessible globally
+      window.deleteUser = deleteUser;
+
+      fetchUsers();
+    });
+  </script>
+</head>
+
+<body>
+  <main class="container">
+    <h1>Users Table</h1>
+    <div id="table-container"></div>
+  </main>
+</body>
+
+</html>
+
+
+
+
+
+<!-- <!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Users Table</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      async function fetchUsers() {
+        const queryText = JSON.stringify({ query: "SELECT id, email, counter FROM users" });
+        try {
+          const response = await fetch("/query", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: queryText
+          });
+
+          const data = await response.json();
           console.log(data)
           displayUsersTable(data.result);
         } catch (error) {
@@ -62,4 +158,4 @@
   </main>
 </body>
 
-</html>
+</html> --> 
