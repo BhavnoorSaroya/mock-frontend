@@ -15,7 +15,6 @@ class Server {
   // Called everytime a request is made 
   middlewares() {
     this.app.use(express.json());
-    this.app.use(express.static('public'));
     this.app.use(verifyMiddleware(this.verifier));
   }
 
@@ -33,6 +32,7 @@ class Server {
       '/admin',
     ];
 
+    // Define express get route for each element in array 
     routes.forEach((route) => {
       this.app.get(route, (req, res) => {
         res.sendFile(
