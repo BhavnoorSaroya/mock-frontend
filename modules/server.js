@@ -30,6 +30,7 @@ class Server {
       '/detect',
       '/video',
       '/admin',
+      '/favicon.ico'
     ];
 
     // Define express get route for each element in array 
