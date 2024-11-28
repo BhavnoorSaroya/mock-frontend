@@ -36,10 +36,18 @@ class Server {
     // Define express get route for each element in array 
     routes.forEach((route) => {
       this.app.get(route, (req, res) => {
-        res.sendFile(
-          // Send index if route is '/'
-          path.join(__dirname, '../public', `${route === '/' ? 'index' : route.substring(1)}.html`)
-        );
+        console.log('route', route)
+        if (route === '/favicon.ico') {
+          console.log('favicon')
+          res.sendFile(
+            path.join(__dirname, '../public', 'favicon.ico')
+          );
+        } else{
+          res.sendFile(
+            path.join(__dirname, '../public', `${route === '/' ? 'index' : route.substring(1)}.html`)
+          );
+        }
+        
       });
     });
   }
