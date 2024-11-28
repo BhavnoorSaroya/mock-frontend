@@ -1,14 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css"
-    />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css" />
 </head>
+
 <body class="container">
     <br>
     <h1>Login</h1>
@@ -27,15 +26,15 @@
         function getUrlParameter(name) {
             name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
             const regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
-            const results = regex.exec(window.location.search);  
-          
-            return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g,  
-           ' '));
-          };
-        
+            const results = regex.exec(window.location.search);
+
+            return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g,
+                ' '));
+        };
+
         document.getElementById('login-form').addEventListener('submit', async function (event) {
             event.preventDefault();
-    
+
             // const email = document.getElementById('username').value;
             const password = document.getElementById('password').value;
             // localStorage.setItem('email', email);
@@ -43,26 +42,26 @@
             console.log(myParam);
             try {
                 const authUrl = 'https://isa-singh.azurewebsites.net/reset-password';
-                // const authUrl = 'http://localhost:3000/reset-password';
+                // const authUrl = 'http://localhost:8000/reset-password';
                 const token = myParam
                 const response = await fetch(authUrl, {
                     method: 'POST',
-                    headers: { 
+                    headers: {
                         'Content-Type': 'application/json',
                         'Authorization': `Bearer ${token}` // Send the token in the Authorization header
-                     },
-                    body: JSON.stringify({password}),
+                    },
+                    body: JSON.stringify({ password }),
                 });
-    
+
                 if (!response.ok) {
                     throw new Error('error: failed');
                 }
-    
+
                 // const data = await response.json();
                 // const token = data.token;
 
-                
-    
+
+
 
                 // Redirect back to the index page
                 window.location.href = '/';
@@ -72,5 +71,6 @@
             }
         });
     </script>
-    </body>
+</body>
+
 </html>

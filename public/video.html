@@ -7,7 +7,6 @@
   <title>Live Video Stream</title>
   <link rel="stylesheet" href="https://unpkg.com/@picocss/pico@1.*/css/pico.min.css" />
   <style>
-    /* Container for the video and overlays */
     .video-container {
       position: relative;
       display: flex;
@@ -16,24 +15,18 @@
       margin-top: 20px;
       width: 100%;
       max-width: 800px;
-      /* Adjust as needed */
       height: 450px;
-      /* Adjust as needed */
       background-color: #000;
-      /* Fallback background */
       cursor: pointer;
     }
 
-    /* Video Frame Styling */
     .video-frame {
       max-width: 100%;
       max-height: 100%;
       border: 2px solid #000;
       display: none;
-      /* Hidden initially */
     }
 
-    /* Standard Play Button Styling */
     .play-button {
       position: absolute;
       font-size: 3em;
@@ -54,11 +47,9 @@
       background: rgba(0, 0, 0, 0.7);
     }
 
-    /* Loader Styling */
     .loader {
       position: absolute;
       display: none;
-      /* Hidden initially */
       gap: 10px;
       align-items: center;
       justify-content: center;
@@ -94,7 +85,6 @@
       }
     }
 
-    /* Loader Text Styling */
     #loaderText {
       position: absolute;
       top: 60%;
@@ -103,7 +93,6 @@
       color: #fff;
       font-size: 1em;
       display: none;
-      /* Hidden initially */
     }
   </style>
   <script>
@@ -114,23 +103,17 @@
       const loader = document.getElementById('loader');
       const loaderText = document.getElementById('loaderText');
 
-      // Function to start the video stream
       function startVideo() {
-        // Show the loader and loader text
         loader.style.display = 'flex';
         loaderText.style.display = 'block';
 
-        // Hide the play button
         playButton.style.display = 'none';
 
-        // Set the src attribute to start streaming
-        videoFrame.src = "{{ url_for('video_feed') }}";
+        videoFrame.src = "http://localhost:8000/video-feed";
 
-        // Display the video frame
         videoFrame.style.display = 'block';
       }
 
-      // Event listener for the play button
       playButton.addEventListener('click', (e) => {
         e.stopPropagation(); // Prevent triggering container's click event
         startVideo();
@@ -145,13 +128,11 @@
 
       // Event handlers for the video frame
       videoFrame.addEventListener('load', () => {
-        // Hide the loader once the first frame is loaded
         loader.style.display = 'none';
         loaderText.style.display = 'none';
       });
 
       videoFrame.addEventListener('error', () => {
-        // Hide the loader and show error message
         loader.style.display = 'none';
         loaderText.textContent = 'Failed to load video stream.';
         loaderText.style.display = 'block';

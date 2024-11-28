@@ -1,18 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register</title>
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css"
-    />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css" />
 </head>
+
 <body class="container">
     <br>
     <h2>Register for the application</h2>
-    <form id="register-form" >
+    <form id="register-form">
         <label for="email">Email:</label>
         <input type="email" id="email" required>
         <small>We will never share your email with any 3rd party of send you spam</small>
@@ -34,7 +33,7 @@
 
             try {
                 const registerUrl = 'https://isa-singh.azurewebsites.net/register';
-                // const registerUrl = 'http://localhost:3000/register';
+                // const registerUrl = 'http://localhost:8000/register';
                 const response = await fetch(registerUrl, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -55,6 +54,7 @@
                 document.getElementById('error-message').innerText = 'Registration failed. Please try again.';
             }
         });
-    </script> 
+    </script>
 </body>
+
 </html>
