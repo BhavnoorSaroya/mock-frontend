@@ -49,6 +49,28 @@
         }
       }
 
+      async function updateCounter(email, counter) {
+        try {
+          const response = await fetch("/update-usage", {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ email: email, counter: parseInt(counter, 10) }),
+            credentials: "include" // Include cookies for authentication
+          });
+
+          const data = await response.json();
+          if (response.ok) {
+            alert(data.message);
+          } else {
+            alert(`Error: ${data.message}`);
+          }
+        } catch (error) {
+          console.error("Error updating counter:", error);
+        }
+      }
+
       function displayUsersTable(users) {
         const tableContainer = document.getElementById("table-container");
 
@@ -64,7 +86,24 @@
           table += "<tr>";
           table += `<td>${user[0]}</td>`; // ID
           table += `<td>${user[1]}</td>`; // Email
-          table += `<td>${user[2]}</td>`; // API usage
+          table +=
+          `<td role="group">
+              <input 
+                type="number" 
+                value="${user[2]}" 
+                id="usage-${user[1]}" 
+                aria-label="API usage for ${user[1]}">
+             <button 
+                onclick="updateCounter('${user[1]}', document.getElementById('usage-${user[1]}').value)">
+                Update
+              </button>
+            </td>
+          `
+          //  `
+          //   <td>
+          //     <input type="number" value="${user[2]}" id="usage-${user[1]}" style="width: 60px;">
+          //     <button onclick="updateCounter('${user[1]}', document.getElementById('usage-${user[1]}').value)">Update</button>
+          //   </td>`; // Editable API usage with Update button
           table += `<td><button onclick="deleteUser('${user[1]}')">Delete</button></td>`; // Delete button
           table += "</tr>";
         });
@@ -73,8 +112,9 @@
         tableContainer.innerHTML = table;
       }
 
-      // Make deleteUser function accessible globally
+      // Make deleteUser and updateCounter functions accessible globally
       window.deleteUser = deleteUser;
+      window.updateCounter = updateCounter;
 
       fetchUsers();
     });
@@ -89,73 +129,3 @@
 </body>
 
 </html>
-
-
-
-
-
-<!-- <!DOCTYPE html>
-<html lang="en">
-
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Users Table</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      async function fetchUsers() {
-        const queryText = JSON.stringify({ query: "SELECT id, email, counter FROM users" });
-        try {
-          const response = await fetch("/query", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json"
-            },
-            body: queryText
-          });
-
-          const data = await response.json();
-          console.log(data)
-          displayUsersTable(data.result);
-        } catch (error) {
-          console.error("Error fetching users:", error);
-        }
-      }
-
-      function displayUsersTable(users) {
-        const tableContainer = document.getElementById("table-container");
-
-        const headers = ["ID", "Email", "API usage"];
-
-        let table = "<table><thead><tr>";
-        headers.forEach(header => {
-          table += `<th>${header}</th>`;
-        });
-        table += "</tr></thead><tbody>";
-
-        users.forEach(user => {
-          table += "<tr>";
-          table += `<td>${user[0]}</td>`;   // ID
-          table += `<td>${user[1]}</td>`;   // Email
-          table += `<td>${user[2]}</td>`;   // API Tokens Left
-          table += "</tr>";
-        });
-        table += "</tbody></table>";
-
-        tableContainer.innerHTML = table;
-      }
-
-      fetchUsers();
-    });
-  </script>
-</head>
-
-<body>
-  <main class="container">
-    <h1>Users Table</h1>
-    <div id="table-container"></div>
-  </main>
-</body>
-
-</html> --> 
